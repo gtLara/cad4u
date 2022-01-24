@@ -320,7 +320,7 @@ initial begin
      forever #1 clk = ~clk;
 end
 //altere aqui, de acordo com o numero de instruções no programa
-parameter nInstrucoes = 2;
+parameter nInstrucoes = 1;
 cpu #(nInstrucoes)CPU(clk);
 initial begin
     $dumpfile("test.vcd");
