@@ -49,7 +49,6 @@ endmodule
 
 /* note: there was a problem with the or instruction */
 
-
 module alu_control(
 		input wire [3:0] funct,
 		input wire [1:0] aluop,
@@ -58,13 +57,13 @@ module alu_control(
 	reg [3:0] _funct;
 
 	always @(*) begin
-		case(funct[3:0])
-			4'd0:  _funct = 4'd2;	/* add */
-			4'd8:  _funct = 4'd6;	/* sub */
-			4'd5:  _funct = 4'd1;	/* more akin to srl */
-			4'd6:  _funct = 4'd1;	/* or */
-			4'd7:  _funct = 4'd12;	/* nor */
-			4'd10: _funct = 4'd7;	/* slt */
+		case(funct[2:0])
+			3'd0:  _funct = 4'd2;	/* add */
+			3'd8:  _funct = 4'd6;	/* sub */
+			3'd5:  _funct = 4'd1;	/* more akin to srl */
+			3'd6:  _funct = 4'd1;	/* or */
+			3'd7:  _funct = 4'd12;	/* nor */
+			3'd10: _funct = 4'd7;	/* slt */
 			default: _funct = 4'd0;
 		endcase
 	end
