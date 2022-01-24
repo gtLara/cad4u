@@ -26,6 +26,7 @@ module alu(
 			4'd0:  out <= a & b;				/* and */
 			4'd12: out <= ~(a | b);				/* nor */
 			4'd1:  out <= a | b;				/* or */
+			4'd3:  out <= a << b;				/* sll */
 			4'd7:  out <= {{31{1'b0}}, slt};	/* slt */
 			4'd6:  out <= sub_ab;				/* sub */
 			4'd13: out <= a ^ b;				/* xor */
@@ -50,7 +51,7 @@ endmodule
 /* note: there was a problem with the or instruction */
 
 module alu_control(
-		input wire [3:0] funct,
+		input wire [3:0] funct, // problema aqui: funct deveria ter 3 bits mas recebia 4, fodendo o controle todo. resolvido simplesmente truncando essa merda
 		input wire [1:0] aluop,
 		output reg [3:0] aluctl);
 
@@ -59,6 +60,7 @@ module alu_control(
 	always @(*) begin
 		case(funct[2:0])
 			3'd0:  _funct = 4'd2;	/* add */
+			3'd1:  _funct = 4'd3;	/* sll */
 			3'd8:  _funct = 4'd6;	/* sub */
 			3'd5:  _funct = 4'd1;	/* more akin to srl */
 			3'd6:  _funct = 4'd1;	/* or */
@@ -72,7 +74,7 @@ module alu_control(
 		case(aluop)
 			2'd0: aluctl = 4'd2;	/* add */
 			2'd1: aluctl = 4'd6;	/* sub */
-			2'd2: aluctl = _funct;
+			2'd2: aluctl = _funct;  /* I type defaults here */
 			2'd3: aluctl = 4'd2;	/* add */
 			default: aluctl = 0;
 		endcase
