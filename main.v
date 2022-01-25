@@ -242,7 +242,7 @@ module cpu(
 		case (1'b1)
 			branch_eq_s4: pcsrc <= zero_s4;
 			branch_ne_s4: pcsrc <= ~(zero_s4);
-			branch_lt_s4: pcsrc <= alurslt_s4[31];
+			branch_lt_s4: pcsrc <= zero_s4;
 
 			default: pcsrc <= 1'b0;
 		endcase

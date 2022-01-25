@@ -10,9 +10,6 @@ module alu(
 	wire 		oflow_sub;
 	wire 		oflow;
 	wire 		slt;
-
-	assign zero = (0 == out);
-
 	assign sub_ab = a - b;
 	assign add_ab = a + b;
 	assign oflow_add = (a[31] == b[31] && add_ab[31] != a[31]) ? 1 : 0;
@@ -20,6 +17,16 @@ module alu(
 	assign oflow = (ctl == 4'b0010) ? oflow_add : oflow_sub;
 	// set if less than, 2s compliment 32-bit numbers
 	assign slt = oflow_sub ? ~(a[31]) : a[31];
+    // explicacao do porque slt para definir o resultado de blt está certo:
+    // sign-bit   res  a_bit                             exemplo       
+    // 1 == 1  &&  1 != 1  -> oflow=0 neg_a > neg_b  ( -10 - -2  )  -> a < b    [ < ] = slt=1
+    // 1 == 1  &&  0 != 1  -> oflow=1 neg_a < neg_b  ( -2  - -10 )  -> a > b    [ > ] = slt=0
+    // 0 == 0  &&  0 != 0  -> oflow=0 pos_a > pos_b  ( 10  -  2  )  -> a > b    [ > ] = slt=0
+    // 0 == 0  &&  1 != 0  -> oflow=1 pos_a < pos_b  (  2  -  10 )  -> a < b    [ < ] = slt=1
+    //
+    // 0 != 1              -> oflow=0                               -> a > b    [ > ] = slt=0
+    // 1 != 0              -> oflow=0                               -> a < b    [ < ] = slt=1
+    assign zero = (0 == out) || (1 == slt);
 	always @(*) begin
 		case (ctl)
 			4'd2:  out <= add_ab;				/* add */

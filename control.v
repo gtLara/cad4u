@@ -14,6 +14,7 @@ module control(
 		alusrc		<= 1'b0;
 		branch_eq	<= 1'b0;
 		branch_ne	<= 1'b0;
+		branch_lt	<= 1'b0;
 		memread		<= 1'b0;
 		memtoreg	<= 1'b0;
 		memwrite	<= 1'b0;
